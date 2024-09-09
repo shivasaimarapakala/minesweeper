@@ -15,7 +15,7 @@ function Square({ id, value, onSquareClick, status }) {
   const handleClick = (event) => {
     event.preventDefault(); 
 
-    if (event.button === 2) { // Right-click
+    if (event.button === 2) { 
       setFlagged(prevFlagged => !prevFlagged); 
     } else if (event.button === 0 && !flagged) { 
       onSquareClick(id);

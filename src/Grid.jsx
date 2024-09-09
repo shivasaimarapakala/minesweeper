@@ -8,6 +8,7 @@ const Grid = ({ items }) => {
   const [firstClick, setFirstClick] = useState(true);
   const [statusMatrix, setStatusMatrix] = useState(items);
 
+
   const handleSquareClick = (id) => {
     let newItems = gridItems.map((row) => [...row]);
     let i = Math.floor((id - 1) / 10),
@@ -24,11 +25,12 @@ const Grid = ({ items }) => {
         count++;
       }
       setFirstClick(false);
+      setGridItems(newItems);
     }
-    setGridItems(newItems);
 
     if (gridItems[i][j] === null) {
-      let revealMatrix = statusMatrix.map((row) => [...row]);
+      setStatusMatrix(prevMatrix => {
+      const revealMatrix = [...prevMatrix]
       let x = gridItems.length - 1,
         y = gridItems[0].length - 1;
       let temp = [
@@ -49,10 +51,16 @@ const Grid = ({ items }) => {
           }
         }
       });
-      setStatusMatrix(revealMatrix);
-    } else {
-      statusMatrix[i][j] = 1;
-      setStatusMatrix(statusMatrix);
+      return revealMatrix
+    })
+      // setStatusMatrix(revealMatrix);
+
+      
+
+    } else if (statusMatrix[i][j] !== 1) {  
+      let revealMatrix = [...statusMatrix]
+      revealMatrix[i][j] = 1;
+      setStatusMatrix(prevMatrix => revealMatrix);
     }
   };
   //
