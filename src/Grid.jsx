@@ -1,13 +1,12 @@
 import React from "react";
 import { useState } from "react";
 import Square from "./Square";
-import { generateMineField } from "./utils";
+import { generateMineFieldFromId, blockReveal } from "./utils";
 
 const Grid = ({ items }) => {
   const [gridItems, setGridItems] = useState(items);
   const [firstClick, setFirstClick] = useState(true);
   const [statusMatrix, setStatusMatrix] = useState(items);
-
 
   const handleSquareClick = (id) => {
     let newItems = gridItems.map((row) => [...row]);
@@ -15,52 +14,18 @@ const Grid = ({ items }) => {
       j = (id - 1) % 10;
 
     if (firstClick) {
-      let temp = true;
-      let count = 0;
-      while (temp && count < 20) {
-        newItems = generateMineField(8, 10, 10);
-        if (newItems[Math.floor((id - 1) / 10)][(id - 1) % 10] == null) {
-          temp = false;
-        }
-        count++;
-      }
+      newItems = generateMineFieldFromId(id, gridItems);
       setFirstClick(false);
       setGridItems(newItems);
     }
 
     if (gridItems[i][j] === null) {
-      setStatusMatrix(prevMatrix => {
-      const revealMatrix = [...prevMatrix]
-      let x = gridItems.length - 1,
-        y = gridItems[0].length - 1;
-      let temp = [
-        [i, j],
-        [i - 1, j - 1],
-        [i - 1, j],
-        [i - 1, j + 1],
-        [i, j - 1],
-        [i, j + 1],
-        [i + 1, j - 1],
-        [i + 1, j],
-        [i + 1, j + 1],
-      ];
-      temp.forEach((value) => {
-        if (value[0] >= 0 && value[0] <= x && value[1] >= 0 && value[1] <= y) {
-          if (revealMatrix[value[0]][value[1]] === null) {
-            revealMatrix[value[0]][value[1]] = 1;
-          }
-        }
-      });
-      return revealMatrix
-    })
-      // setStatusMatrix(revealMatrix);
-
-      
-
-    } else if (statusMatrix[i][j] !== 1) {  
-      let revealMatrix = [...statusMatrix]
+      setStatusMatrix(
+        (prevMatrix) => blockReveal(gridItems, prevMatrix, i, j));
+    } else if (statusMatrix[i][j] !== 1) {
+      let revealMatrix = [...statusMatrix];
       revealMatrix[i][j] = 1;
-      setStatusMatrix(prevMatrix => revealMatrix);
+      setStatusMatrix(revealMatrix);
     }
   };
   //

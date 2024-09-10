@@ -24,7 +24,7 @@ function Square({ id, value, onSquareClick, status }) {
 
   return (
     <button
-      className={`square ${status ? "revealedSquare" : "unrevealedSquare"}${flagged ? " flaggedSquare" : ""}`}
+      className={status ? 'square' : flagged ? 'flaggedSquare' : 'unrevealedSquare'}
       onMouseDown={handleClick}
       onContextMenu={(e) => e.preventDefault()}
     >

@@ -33,9 +33,9 @@ export function proximitydetector(i, j, fieldMatrix) {
 }
 
 export function generateMineField(rows, cols, numMines) {
-    const numbers = Array(rows*cols).fill().map((_, i) => i + 1);
+    const numbers = Array(rows * cols).fill().map((_, i) => i + 1);
     const mines = getRandomElements(numbers, numMines);
-    const field = Array(rows*cols).fill(0).map((x, i) => mines.includes(i + 1) ? x = 'X' : 0)
+    const field = Array(rows * cols).fill(0).map((x, i) => mines.includes(i + 1) ? x = 'X' : 0)
     const fieldMatrix = arraySplit(field, cols);
 
     fieldMatrix.forEach((element, i) => {
@@ -51,5 +51,47 @@ export function generateMineField(rows, cols, numMines) {
     });
 
     return fieldMatrix
+}
+
+export function generateMineFieldFromId(id, gridItems) {
+    let newItems = gridItems.map((row) => [...row]);
+    let temp = true;
+    let count = 0;
+    while (temp && count < 20) {
+        newItems = generateMineField(8, 10, 10);
+        if (newItems[Math.floor((id - 1) / 10)][(id - 1) % 10] == null) {
+            temp = false;
+        }
+        count++;
+    }
+    return newItems
+}
+
+export function blockReveal(gridItems, prevMatrix, i, j) {
+
+    const revealMatrix = [...prevMatrix]
+    let x = gridItems.length - 1,
+        y = gridItems[0].length - 1;
+    let temp = [
+        [i, j],
+        [i - 1, j - 1],
+        [i - 1, j],
+        [i - 1, j + 1],
+        [i, j - 1],
+        [i, j + 1],
+        [i + 1, j - 1],
+        [i + 1, j],
+        [i + 1, j + 1],
+    ];
+    temp.forEach((value) => {
+        if (value[0] >= 0 && value[0] <= x && value[1] >= 0 && value[1] <= y) {
+            if (revealMatrix[value[0]][value[1]] === null) {
+                revealMatrix[value[0]][value[1]] = 1;
+            }
+        }
+    });
+    return revealMatrix
+
+
 }
 
