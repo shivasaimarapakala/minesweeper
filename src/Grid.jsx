@@ -28,7 +28,8 @@ const Grid = ({ items }) => {
       setStatusMatrix(revealMatrix);
     }
   };
-  //
+  
+
   return (
     <>
       {statusMatrix.map((row, i) => (

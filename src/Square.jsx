@@ -6,10 +6,9 @@ function Square({ id, value, onSquareClick, status }) {
 
   useEffect(() => {
     if (status === 1) {
-      console.log(id);
       onSquareClick(id);
     }
-  }, [status]);
+  }, [status]); 
 
 
   const handleClick = (event) => {
